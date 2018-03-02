@@ -67,7 +67,7 @@ public class Main {
         }).blockUntilComplete(new IObserver<Integer>() {
             @Override
             public void onNext(Integer value) {
-                System.out.println("Next: "+value);
+                System.out.println("The Next length is: "+value);
             }
 
             @Override
