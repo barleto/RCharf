@@ -13,12 +13,15 @@ public class Main {
         Observable<String> ob = Observable.create(new IObservable<String>() {
             @Override
             public IDisposable subscribe(final IObserver observer) {
-                new Timer().schedule(new TimerTask() {
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+
                     @Override
                     public void run() {
                         observer.onNext("First next!");
                         observer.onNext("Second next!");
                         observer.onComplete();
+                        timer.cancel();
                     }
                 },2000);
                 return null;
