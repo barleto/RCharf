@@ -21,10 +21,16 @@ public class Main {
                         observer.onNext("First next!");
                         observer.onNext("Second next!");
                         observer.onComplete();
+                        observer.onNext("this won't be called");
                         timer.cancel();
                     }
                 },2000);
-                return null;
+                return new IDisposable() {
+                    @Override
+                    public void dispose() {
+                        timer.cancel();
+                    }
+                };
             }
         });
 
@@ -105,3 +111,4 @@ public class Main {
         return;
     }
 }
+

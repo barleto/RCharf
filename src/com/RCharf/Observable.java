@@ -16,7 +16,21 @@ public class Observable<T> implements IObservable<T>{
 
     @Override
     public IDisposable subscribe(IObserver observer) {
-        return source.subscribe(observer);
+        Observer wrapper = Observer.create(observer);
+        IDisposable disposable = source.subscribe(wrapper);
+        return getWrapperDisposable(wrapper, disposable);
+    }
+
+    private IDisposable getWrapperDisposable(Observer wrapper, IDisposable disposable) {
+        return new IDisposable() {
+            @Override
+            public void dispose() {
+                wrapper.dispose();
+                if(disposable!=null) {
+                    disposable.dispose();
+                }
+            }
+        };
     }
 
     public void blockUntilComplete(IObserver<T> observer){
