@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Observable<String> ob = Observable.create(new IObservable<String>() {
+        Observable<String> observable = Observable.create(new IObservable<String>() {
             @Override
             public IDisposable subscribe(final IObserver observer) {
                 Timer timer = new Timer();
@@ -36,7 +36,7 @@ public class Main {
         //-------------------------------------------
 
         System.out.println("before blocking first call");
-        System.out.println(ob.blockingFirst());
+        System.out.println(observable.blockingFirst());
         System.out.println("after blocking first call");
         //-------------------------------------------
 
@@ -44,7 +44,7 @@ public class Main {
 
         System.out.println("before toCollection call");
         try {
-            System.out.println("Collection: " + ob.where(v -> v.contains("Second")).toCollection());
+            System.out.println("Collection: " + observable.where(v -> v.contains("Second")).toCollection());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class Main {
         System.out.println();
 
         System.out.println("before subscribe lambda, non-blocking");
-        ob.range(0, 10).subscribe(System.out::println);
+        observable.range(0, 10).subscribe(System.out::println);
         System.out.println("after subscribe lambda, non-blocking");
         //-------------------------------------------
 
@@ -72,7 +72,7 @@ public class Main {
         System.out.println();
 
         System.out.println("before blockUntilComplete call with map");
-        ob.map(value -> value + "-> added with map!")
+        observable.map(value -> value + "-> added with map!")
                 .map(value -> ((String) value).length())
                 .blockUntilComplete(new IObserver<Integer>() {
                     @Override
