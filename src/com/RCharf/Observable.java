@@ -2,6 +2,7 @@ package com.RCharf;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Observable<T> implements IObservable<T>{
 
@@ -127,4 +128,34 @@ public class Observable<T> implements IObservable<T>{
     public Observable filter(FilterFunction<T> function){
         return new ObservableFilter<T>(this,function);
     }
+
+    public static Observable<Integer> range(int start, int count)
+    {
+        int max = start + count;
+        return Observable.generate(
+                start,
+                value -> value < max,
+                value -> value + 1,
+                value -> value);
+    }
+
+    public static <S,R> Observable<R> generate(S state, Function<S,Boolean> condition, Function<S,S> iterate,Function<S,R> stateToResult){
+        return Observable.create(new IObservable<R>() {
+            private S mState = state;
+            private Function<S,Boolean> mCondition = condition;
+            private Function<S,S> mIterate = iterate;
+            private Function<S,R> mStateToResult = stateToResult;
+
+            @Override
+            public IDisposable subscribe(IObserver<R> observer) {
+                while(mCondition.apply(mState)){
+                    observer.onNext(mStateToResult.apply(mState));
+                    mState = mIterate.apply(mState);
+                }
+                observer.onComplete();
+                return Disposable.empty();
+            }
+        });
+    }
 }
+
