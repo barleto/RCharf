@@ -108,7 +108,7 @@ public class Observable<T> implements IObservable<T>{
         return blockObserver.value;
     }
 
-    public ArrayList<T> collection() throws Exception {
+    public ArrayList<T> toCollection() throws Exception {
         final CollectionObserver<T> collectionObserver = new CollectionObserver<>();
         IDisposable disposable = this.subscribe(collectionObserver);
         collectionObserver.waitForRelease();
@@ -123,11 +123,11 @@ public class Observable<T> implements IObservable<T>{
         }
     }
 
-    public <R> Observable map(MapFunction<T,R> function){
+    public <R> Observable map(Function<T,R> function){
         return new ObservableMap<T,R>(this, function);
     }
 
-    public Observable filter(FilterFunction<T> function){
+    public Observable where(Function<T,Boolean> function){
         return new ObservableFilter<T>(this,function);
     }
 

@@ -1,11 +1,13 @@
 package com.RCharf;
 
+import java.util.function.Function;
+
 public class ObservableMap<T, R> extends Observable<T>{
 
-    MapFunction<T, R> function = null;
+    Function<T, R> function = null;
     private IObserver<T> proxy;
 
-    protected  ObservableMap(IObservable<T> source,MapFunction<T,R> funciton) {
+    protected  ObservableMap(IObservable<T> source,Function<T,R> funciton) {
         super(source);
         this.function = funciton;
     }

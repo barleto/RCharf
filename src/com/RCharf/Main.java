@@ -8,7 +8,7 @@ import java.util.TimerTask;
  */
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Observable<String> ob = Observable.create(new IObservable<String>() {
             @Override
@@ -24,7 +24,7 @@ public class Main {
                         observer.onNext("this won't be called");
                         timer.cancel();
                     }
-                },1000);
+                }, 1000);
                 return new IDisposable() {
                     @Override
                     public void dispose() {
@@ -40,28 +40,19 @@ public class Main {
 
         System.out.println();
 
-        System.out.println("before collection call");
+        System.out.println("before toCollection call");
         try {
-            System.out.println("Collection: "+ob.filter(new FilterFunction<String>() {
-                @Override
-                public Boolean apply(String value) {
-                    if(value.contains("First")){
-                        return false;
-                    }else{
-                        return true;
-                    }
-                }
-            }).collection());
+            System.out.println("Collection: " + ob.where(v -> v.contains("Second")).toCollection());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("after collection call");
+        System.out.println("after toCollection call");
 
 
         System.out.println();
 
         System.out.println("before subscribe lambda, non-blocking");
-        ob.range(0,10).subscribe(System.out::println);
+        ob.range(0, 10).subscribe(System.out::println);
         System.out.println("after subscribe lambda, non-blocking");
 
 
@@ -78,32 +69,24 @@ public class Main {
         System.out.println();
 
         System.out.println("before blockUntilComplete call with map");
-        ob.map(new MapFunction<String, String>() {
-            @Override
-            public String apply(String value) {
-                return value+"-> added with map!";
-            }
-        }).map(new MapFunction<String, Integer>(){ //Chained map!
-            @Override
-            public Integer apply(String value) {
-                return value.length();
-            }
-        }).blockUntilComplete(new IObserver<Integer>() {
-            @Override
-            public void onNext(Integer value) {
-                System.out.println("The Next length is: "+value);
-            }
+        ob.map(value -> value + "-> added with map!")
+                .map(value -> ((String) value).length())
+                .blockUntilComplete(new IObserver<Integer>() {
+                    @Override
+                    public void onNext(Integer value) {
+                        System.out.println("The Next length is: " + value);
+                    }
 
-            @Override
-            public void onError(Exception e) {
+                    @Override
+                    public void onError(Exception e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
-                System.out.println("Completed!");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        System.out.println("Completed!");
+                    }
+                });
         System.out.println("after blockUntilComplete call with map");
 
         return;

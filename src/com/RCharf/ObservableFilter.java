@@ -1,11 +1,13 @@
 package com.RCharf;
 
+import java.util.function.Function;
+
 public class ObservableFilter<T> extends Observable<T>{
 
-    FilterFunction<T> function = null;
+    Function<T,Boolean> function = null;
     private IObserver<T> proxy;
 
-    protected  ObservableFilter(IObservable<T> source,FilterFunction<T> funciton) {
+    protected  ObservableFilter(IObservable<T> source,Function<T,Boolean> funciton) {
         super(source);
         this.function = funciton;
     }
