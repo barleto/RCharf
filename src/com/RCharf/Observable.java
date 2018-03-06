@@ -1,6 +1,7 @@
 package com.RCharf;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class Observable<T> implements IObservable<T>{
 
@@ -24,6 +25,26 @@ public class Observable<T> implements IObservable<T>{
             wrapper.onError(e);
         }
         return getWrapperDisposable(wrapper, disposable);
+    }
+
+    public IDisposable subscribe(Consumer<T> onNext){
+        Observer wrapper = Observer.create(new IObserver<T>() {
+            @Override
+            public void onNext(T value) {
+                onNext.accept(value);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        return this.subscribe(wrapper);
     }
 
     private IDisposable getWrapperDisposable(Observer wrapper, IDisposable disposable) {

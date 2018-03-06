@@ -24,7 +24,7 @@ public class Main {
                         observer.onNext("this won't be called");
                         timer.cancel();
                     }
-                },2000);
+                },1000);
                 return new IDisposable() {
                     @Override
                     public void dispose() {
@@ -90,25 +90,11 @@ public class Main {
 
         System.out.println();
 
-        System.out.println("before call non-blocking");
-        ob.subscribe(new IObserver<String>() {
-            @Override
-            public void onNext(String value) {
-                System.out.println("Next: "+value);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-        System.out.println("after call non-blocking");
+        System.out.println("before subscribe lambda, non-blocking");
+        ob.subscribe(System.out::println);
+        System.out.println("after subscribe lambda, non-blocking");
         return;
     }
+
 }
 
