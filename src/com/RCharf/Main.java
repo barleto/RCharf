@@ -33,10 +33,12 @@ public class Main {
                 };
             }
         });
+        //-------------------------------------------
 
         System.out.println("before blocking first call");
         System.out.println(ob.blockingFirst());
         System.out.println("after blocking first call");
+        //-------------------------------------------
 
         System.out.println();
 
@@ -47,14 +49,14 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println("after toCollection call");
-
+        //-------------------------------------------
 
         System.out.println();
 
         System.out.println("before subscribe lambda, non-blocking");
         ob.range(0, 10).subscribe(System.out::println);
         System.out.println("after subscribe lambda, non-blocking");
-
+        //-------------------------------------------
 
         System.out.println();
 
@@ -65,6 +67,7 @@ public class Main {
         rs.onNext("Replay Subject: 2!");
         rs.onNext("Replay Subject: 3!");
         System.out.println("After Replay Subject");
+        //-------------------------------------------
 
         System.out.println();
 
