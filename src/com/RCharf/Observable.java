@@ -1,6 +1,8 @@
 package com.RCharf;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -139,6 +141,31 @@ public class Observable<T> implements IObservable<T>{
                 value -> value);
     }
 
+    public static Observable<Integer> timer(int milliseconds)
+    {
+        return Observable.create(new IObservable<Integer>() {
+            @Override
+            public IDisposable subscribe(final IObserver observer) {
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        observer.onNext(0);
+                        observer.onComplete();
+                        timer.cancel();
+                    }
+                },milliseconds);
+                return new IDisposable() {
+                    @Override
+                    public void dispose() {
+                        timer.cancel();
+                    }
+                };
+            }
+        });
+    }
+
     public static <S,R> Observable<R> generate(S state, Function<S,Boolean> condition, Function<S,S> iterate,Function<S,R> stateToResult){
         return Observable.create(new IObservable<R>() {
             private S mState = state;
@@ -157,5 +184,8 @@ public class Observable<T> implements IObservable<T>{
             }
         });
     }
+
+
+
 }
 
