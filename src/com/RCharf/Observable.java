@@ -11,6 +11,8 @@ public class Observable<T> implements IObservable<T>{
         this.source = source;
     }
 
+    protected Observable() {}
+
     public static <V> Observable<V> create(IObservable<V> ObservableOnSubscribe){
         return new Observable<V>(ObservableOnSubscribe);
     }
@@ -28,26 +30,51 @@ public class Observable<T> implements IObservable<T>{
     }
 
     public IDisposable subscribe(Consumer<T> onNext){
-        Observer wrapper = Observer.create(new IObserver<T>() {
+        Observer wrapper = createCustomObserver(onNext, null, null);
+        return this.subscribe(wrapper);
+    }
+
+    public IDisposable subscribe(Consumer<T> onNext, Consumer onError){
+        Observer wrapper = createCustomObserver(onNext, onError, null);
+        return this.subscribe(wrapper);
+    }
+
+    public IDisposable subscribe(Consumer<T> onNext, Consumer onError, Consumer onCompleted){
+        Observer wrapper = createCustomObserver(onNext, onError, onCompleted);
+        return this.subscribe(wrapper);
+    }
+
+    protected Observer<T> createCustomObserver(Consumer<T> onNextCons, Consumer onErrorCons, Consumer onCompletedCons){
+        return Observer.create(new IObserver<T>() {
+
+            Consumer<T> onNextLambda = onNextCons;
+            Consumer onErrorLambda = onErrorCons;
+            Consumer onCompletedLambda = onCompletedCons;
+
             @Override
             public void onNext(T value) {
-                onNext.accept(value);
+                if(onNextLambda!=null){
+                    onNextLambda.accept(value);
+                }
             }
 
             @Override
             public void onError(Exception e) {
-
+                if(onErrorLambda!=null){
+                    onErrorLambda.accept(null);
+                }
             }
 
             @Override
             public void onComplete() {
-
+                if(onCompletedLambda!=null){
+                    onCompletedLambda.accept(null);
+                }
             }
         });
-        return this.subscribe(wrapper);
     }
 
-    private IDisposable getWrapperDisposable(Observer wrapper, IDisposable disposable) {
+    protected IDisposable getWrapperDisposable(Observer wrapper, IDisposable disposable) {
         return new IDisposable() {
             @Override
             public void dispose() {

@@ -57,6 +57,23 @@ public class Main {
         }
         System.out.println("after collection call");
 
+
+        System.out.println();
+
+        System.out.println("before subscribe lambda, non-blocking");
+        ob.subscribe(System.out::println);
+        System.out.println("after subscribe lambda, non-blocking");
+
+        System.out.println();
+
+        System.out.println("before Replay Subject");
+        Subject rs = new Subject<String>();
+        rs.onNext("Replay Subject: 1!");
+        rs.subscribe(System.out::println);
+        rs.onNext("Replay Subject: 2!");
+        rs.onNext("Replay Subject: 3!");
+        System.out.println("After Replay Subject");
+
         System.out.println();
 
         System.out.println("before blockUntilComplete call with map");
@@ -88,11 +105,6 @@ public class Main {
         });
         System.out.println("after blockUntilComplete call with map");
 
-        System.out.println();
-
-        System.out.println("before subscribe lambda, non-blocking");
-        ob.subscribe(System.out::println);
-        System.out.println("after subscribe lambda, non-blocking");
         return;
     }
 
