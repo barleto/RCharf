@@ -53,6 +53,7 @@ public class ReplaySubject<T> extends Subject<T> {
         for (T value : cache) {
             wrapper.onNext(value);
         }
+        cache.clear();
         hasSubscribed = true;
     }
 }
