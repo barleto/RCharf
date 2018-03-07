@@ -61,8 +61,8 @@ public class Main {
         System.out.println();
 
         System.out.println("before Replay Subject");
-        Subject rs = new Subject<String>();
-        rs.onNext("Replay Subject: 1!");
+        Subject rs = new ReplaySubject<String>();
+        rs.onNext("Replay Subject: 1! (Before subscribe)");
         rs.subscribe(System.out::println);
         rs.onNext("Replay Subject: 2!");
         rs.onNext("Replay Subject: 3!");
