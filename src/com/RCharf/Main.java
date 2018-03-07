@@ -54,7 +54,7 @@ public class Main {
         System.out.println();
 
         System.out.println("before subscribe lambda, non-blocking");
-        observable.range(0, 10).subscribe(System.out::println);
+        Observable.range(0, 10).subscribe(System.out::println);
         System.out.println("after subscribe lambda, non-blocking");
         //-------------------------------------------
 

@@ -37,11 +37,6 @@ public class Observable<T> implements IObservable<T>{
         return this.subscribe(wrapper);
     }
 
-    public IDisposable subscribe(Consumer<T> onNext, Consumer onError){
-        Observer wrapper = createCustomObserver(onNext, onError, null);
-        return this.subscribe(wrapper);
-    }
-
     public IDisposable subscribe(Consumer<T> onNext, Consumer onError, Consumer onCompleted){
         Observer wrapper = createCustomObserver(onNext, onError, onCompleted);
         return this.subscribe(wrapper);
